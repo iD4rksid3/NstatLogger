@@ -26,6 +26,7 @@ $ cd NstatLogger
 $ python3 -m pip install -r requirements.txt
 ```
 or download the stand alone Windows exe file from [release](https://github.com/iD4rksid3/NstatLogger/releases).
+
 or compile it yourself using pyinstaller:
 ```
 $ pyinstaller -i .\rsc\file.ico --hidden-import=requests -F NstatLogger.py
