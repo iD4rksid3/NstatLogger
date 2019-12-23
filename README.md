@@ -63,7 +63,7 @@ $ python3 NstatLogger.py -t 2000 -i 5 # will run the tool for 2000 seconds with 
 # a NstatLogger-xxx-uniq.log file will be writen to current directory
 $ python3 NstatLogger.py -r NstatLogger-xxx-Uniq.log # Performe reverse IP lookup on the output
 ```
-:exclamation: **Note: Output from -r (resolve) can get messy if dns history or ssl alternative names is huge.**
+:exclamation: **Note: Output from -r (resolve) can get messy if dns history or ssl alternative names is huge!, use a tool like notepad++ or mcedit to view the file**
 
 ### Use case:
 Packet capture can get huge and looking for suspecious communication can get really tedious among all these legit packets, NetFlow traffic can be usefull but again as with packet capture we have no clue which process made that request which what this tool will try to solve, and of course this tool is no replacement for both of these great technologies, it's just a good quick way to start investigation.
