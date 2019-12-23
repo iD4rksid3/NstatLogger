@@ -56,7 +56,8 @@ optional arguments:
 Example:
 ```
 $ python3 NstatLogger.py -t 2000 -i 5 # will run the tool for 2000 seconds with a 5 second interval/refresh
-$ python3 NstatLogger.py -r NstatLogger-22-34-40-Uniq.log # Performe reverse IP lookup on the output
+# a NstatLogger-xxx-uniq.log file will be writen to current directory
+$ python3 NstatLogger.py -r NstatLogger-xxx-Uniq.log # Performe reverse IP lookup on the output
 ```
 ..* Note: Output from -r (resolve) can get messy if dns history or ssl alternative names is huge.
 ### Use case:
