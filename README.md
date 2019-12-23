@@ -21,7 +21,7 @@ $ git clone https://github.com/id4rksid3/NstatLogger
 $ cd NstatLogger
 $ python3 -m pip install -r requirements.txt
 ```
-or download the stand alone Windows exe file in releases.
+or download the stand alone Windows exe file from [release](https://github.com/iD4rksid3/NstatLogger/releases).
 #### Usage:
 ```sh
 D:\NstatLogger.exe -h
