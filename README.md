@@ -12,7 +12,7 @@ NstatLogger or netstat logger is a python3 script that can be used as DFIR tool 
   - Command line
 
 #### Dependencies:
-The tool depends on the awsome [psutil](https://github.com/giampaolo/psutil) python module and the [requests](https://pypi.org/project/requests/) module.
+The tool depends on the awsome [psutil](https://github.com/giampaolo/psutil) python module , [requests](https://pypi.org/project/requests/) module and [pyopenssl](https://pypi.org/project/pyOpenSSL/).
 
 #### Installation:
 Install the dependencies:
