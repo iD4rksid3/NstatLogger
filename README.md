@@ -15,10 +15,10 @@ The tool can later be used to perform reverse IP lookup (using system dns) and g
   - Retrieve dns history of an IP through [Threat Crowd API](https://github.com/AlienVault-OTX/ApiV2) which is recommended as it is passively collect data (without connecting to the remote addresses).
   - Retrieve SSL alternative names through the use of python modules (pyopenssl, requests) which will connect to each remote IP and get the list (it is more accurate, but its not a good practice when doing an investigation) use it if the passive approch doesn't get enough info, and use it behind proxy/vpn. 
 
-#### Dependencies:
+### Dependencies:
 The tool depends on the awsome [psutil](https://github.com/giampaolo/psutil) python module , [requests](https://pypi.org/project/requests/) module and [pyopenssl](https://pypi.org/project/pyOpenSSL/).
 
-#### Installation:
+### Installation:
 Install the dependencies:
 ```sh
 $ git clone https://github.com/id4rksid3/NstatLogger.git
@@ -27,7 +27,7 @@ $ python3 -m pip install -r requirements.txt
 ```
 or download the stand alone Windows exe file from [release](https://github.com/iD4rksid3/NstatLogger/releases).
 
-#### Usage:
+### Usage:
 The tool can run without administrator/root priviliage, but it will not be able to collect all the informtion
 ```sh
 D:\NstatLogger.exe -h
