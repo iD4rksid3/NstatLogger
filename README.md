@@ -1,6 +1,6 @@
 # NstatLogger
 
-NstatLogger or netstat logger is a python3 script that can be used as DFIR tool which will log all uniq communications from a host with the following:
+NstatLogger or netstat logger is a multi platform (Windows/ Linux) python3 script that can be used as DFIR tool which will log all uniq communications from a host with the following info:
 
   - Proto
   - Local address:port
@@ -10,6 +10,7 @@ NstatLogger or netstat logger is a python3 script that can be used as DFIR tool 
   - Program name
   - Time started
   - Command line
+  
 
 #### Dependencies:
 The tool depends on the awsome [psutil](https://github.com/giampaolo/psutil) python module , [requests](https://pypi.org/project/requests/) module and [pyopenssl](https://pypi.org/project/pyOpenSSL/).
@@ -22,7 +23,9 @@ $ cd NstatLogger
 $ python3 -m pip install -r requirements.txt
 ```
 or download the stand alone Windows exe file from [release](https://github.com/iD4rksid3/NstatLogger/releases).
+
 #### Usage:
+The tool can run without administrator/root priviliage, but it will not be able to collect all the informtion
 ```sh
 D:\NstatLogger.exe -h
 #or
@@ -47,6 +50,9 @@ optional arguments:
 [+] Example: NstatLogger -i 2 -t 3600 (will run NstatLogger for one hour, with
 2 seconds interval/refresh)
 ```
+
+### Use case:
+Packet capture can get huge and looking for suspecious communication can get really tedious among all these legit packets, NetFlow traffic can be usefull but again as with packet capture we have no clue which process made that request which what this tool will try to solve, and of course this tool is no replacement for both of these great technologies, it's just a good quick way to start investigation.
 
 ### Output sample:
 ```
