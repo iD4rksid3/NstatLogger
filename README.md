@@ -18,7 +18,7 @@ The tool depends on the awsome [psutil](https://github.com/giampaolo/psutil) pyt
 #### Installation:
 Install the dependencies:
 ```sh
-$ git clone https://github.com/id4rksid3/NstatLogger
+$ git clone https://github.com/id4rksid3/NstatLogger.git
 $ cd NstatLogger
 $ python3 -m pip install -r requirements.txt
 ```
