@@ -11,6 +11,9 @@ NstatLogger or netstat logger is a multi platform (Windows/ Linux) python3 scrip
   - Time started
   - Command line
   
+The tool can later be used to perform reverse IP lookup (using system dns) and get more info using one of the following:
+  - Retrieve dns history of an IP through [Threat Crowd API](https://github.com/AlienVault-OTX/ApiV2) which is recommended as it is passively collect data (without connecting to the remote addresses).
+  - Retrieve SSL alternative names through the use of python modules (pyopenssl, requests) which will connect to each remote IP and get the list (it is more accurate, but its not a good practice when doing an investigation) use it if the passive approch doesn't get enough info, and use it behind proxy/vpn. 
 
 #### Dependencies:
 The tool depends on the awsome [psutil](https://github.com/giampaolo/psutil) python module , [requests](https://pypi.org/project/requests/) module and [pyopenssl](https://pypi.org/project/pyOpenSSL/).
@@ -50,7 +53,12 @@ optional arguments:
 [+] Example: NstatLogger -i 2 -t 3600 (will run NstatLogger for one hour, with
 2 seconds interval/refresh)
 ```
-
+Example:
+```
+$ python3 NstatLogger.py -t 2000 -i 5 # will run the tool for 2000 seconds with a 5 second interval/refresh
+$ python3 NstatLogger.py -r NstatLogger-22-34-40-Uniq.log # Performe reverse IP lookup on the output
+```
+..* Note: Output from -r (resolve) can get messy if dns history or ssl alternative names is huge.
 ### Use case:
 Packet capture can get huge and looking for suspecious communication can get really tedious among all these legit packets, NetFlow traffic can be usefull but again as with packet capture we have no clue which process made that request which what this tool will try to solve, and of course this tool is no replacement for both of these great technologies, it's just a good quick way to start investigation.
 
