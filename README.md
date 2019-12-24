@@ -1,6 +1,6 @@
 # NstatLogger
 
-NstatLogger or netstat logger is a multi platform (Windows/ Linux) python3 script that can be used as DFIR tool which will log all uniq communications from a host with the following info:
+NstatLogger or netstat logger is a multi platform (Windows/ Linux) python3 script that can be used as DFIR tool which will log all uniq communications from a host to a log file in current directory, with the following info:
 
   - Proto
   - Local address:port
