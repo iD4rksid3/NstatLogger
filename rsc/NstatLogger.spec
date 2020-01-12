@@ -3,8 +3,8 @@
 block_cipher = None
 
 
-a = Analysis(['C:\\Users\\mayed\\Desktop\\NstatLogger\\NstatLogger-releasev3.7.py'],
-             pathex=['C:\\Users\\mayed\\Desktop'],
+a = Analysis(['%userprofile%\\Desktop\\NstatLogger-releasev3.7.py'],
+             pathex=['%userprofile%\\Desktop'],
              binaries=[],
              datas=[],
              hiddenimports=['requests'],
