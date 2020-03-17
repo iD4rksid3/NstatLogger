@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Auther: 2020, Mayed Alm
 # NstatLogger: netstat logger of all TCP/IP and UDP communication from a host
-# version: 1.2
+# version: 1.1
 
 import os
 import sys
