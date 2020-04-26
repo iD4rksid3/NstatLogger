@@ -3,8 +3,8 @@
 block_cipher = None
 
 
-a = Analysis(['NstatResolver.py'],
-             pathex=['C:\\%userprofile%\\Desktop\\NstatLogger'],
+a = Analysis(['NstatLogger\\NstatResolverbar.py'],
+             pathex=['C:\\%userprofile%\\Desktop'],
              binaries=[],
              datas=[],
              hiddenimports=['requests'],
@@ -23,11 +23,11 @@ exe = EXE(pyz,
           a.zipfiles,
           a.datas,
           [],
-          name='NstatResolver',
+          name='NstatResolverbar',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=True , icon='rsrc\\file2.ico')
+          console=True , icon='nstatlogger\\rsrc\\file2.ico')
