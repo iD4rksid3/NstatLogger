@@ -110,10 +110,10 @@ class NstatResolver:
                                     reqs.OpenSSL.crypto.FILETYPE_PEM,
                                     reqs.ssl.get_server_certificate((ip, 443)))
                                 dns_alt_names = reqs.get_subj_alt_name(x509)
-                                fout.writelines(templ % (f'{prog_name}', f'{ip}', f'{revers_lookup[ip]}', f'{dns_alt_names}') + '\n')
+                                fout.writelines(templ % (f'{prog}', f'{ip}', f'{revers_lookup[ip]}', f'{dns_alt_names}') + '\n')
                                 bar()
                             except (socket.gaierror,ssl.SSLError,TimeoutError,ConnectionRefusedError,OSError):
-                                fout.writelines(templ % (f'{prog_name}', f'{ip}', f'{revers_lookup[ip]}', '-') + '\n')
+                                fout.writelines(templ % (f'{prog}', f'{ip}', f'{revers_lookup[ip]}', '-') + '\n')
                                 bar() 
                                 continue
         return revers_lookup
