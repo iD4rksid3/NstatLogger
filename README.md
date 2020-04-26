@@ -12,7 +12,7 @@ NstatLogger or netstat logger is a multi platform (Windows/ Linux) python3 scrip
   - Command line
   
 The NstatResolver.py can later be used to perform reverse IP lookup (using system dns) and get more info using one of the following:
-  - Retrieve dns history of an IP through [Threat Crowd API](https://github.com/AlienVault-OTX/ApiV2) which is recommended as it is passively collect data (without connecting to the remote addresses).
+  - Retrieve dns history of an IP through [Threat Crowd API](https://github.com/AlienVault-OTX/ApiV2) and [VirusTotal API](https://developers.virustotal.com/v3.0/reference) which is recommended as it is passively collect data (without connecting to the remote addresses).
   - Retrieve SSL alternative names through the use of python modules (pyopenssl, requests) which will connect to each remote IP and get the list (it is more accurate, but its not a good practice when doing an investigation) use it if the passive approch doesn't get enough info, and use it behind proxy/vpn. 
 
 ### Dependencies:
