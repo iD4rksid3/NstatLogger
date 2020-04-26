@@ -8,8 +8,6 @@ import os
 import re
 import ssl
 import sys
-#from tqdm import tqdm
-#from progress.bar import PixelBar
 from alive_progress import alive_bar
 import json
 import socket
@@ -30,7 +28,7 @@ class NstatResolver:
             '''
 
     def __init__(self):
-        self.vt_api_key = "" #Edit with your virus total API
+        self.vt_api_key = "" #Edit with your virus total API key
         print(self.banner)
         if len(sys.argv) < 2:
             ip_input = input("Enter hostname/IP: ")
