@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Auther: 2020, Mayed Alm
 # NstatLogger: netstat logger of all TCP/IP and UDP communication from a host
-# version: 1.1
+# version: 1.2
 
 import os
 import sys
@@ -23,7 +23,7 @@ class NstatLogger:
   /  |/ / ___/ __/ __ `/ __/ /   / __ \/ __ `/ __ `/ _ \/ ___/
  / /|  (__  ) /_/ /_/ / /_/ /___/ /_/ / /_/ / /_/ /  __/ /    
 /_/ |_/____/\__/\__,_/\__/_____/\____/\__, /\__, /\___/_/     
-                                     /____//____/ v1.1    ©Mayed.alm    
+                                     /____//____/ v1.2    ©Mayed.alm    
                                      
             '''
     
