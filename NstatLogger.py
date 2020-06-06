@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Auther: 2020, Mayed Alm
-# NstatLogger: netstat logger of all TCP/IP and UDP communication from a host
-# version: 1.2
+# NstatLogger: netstat logger of all TCP/IP and partially UDP communication from a host
+# version: 1.5
 
 import os
 import sys
+import csv
 import time
 import socket
 import psutil
@@ -23,7 +24,7 @@ class NstatLogger:
   /  |/ / ___/ __/ __ `/ __/ /   / __ \/ __ `/ __ `/ _ \/ ___/
  / /|  (__  ) /_/ /_/ / /_/ /___/ /_/ / /_/ / /_/ /  __/ /    
 /_/ |_/____/\__/\__,_/\__/_____/\____/\__, /\__, /\___/_/     
-                                     /____//____/ v1.2    ©Mayed.alm    
+                                     /____//____/ v1.5    ©Mayed.alm    
                                      
             '''
     
@@ -74,21 +75,21 @@ class NstatLogger:
             (AF_INET, SOCK_DGRAM): 'udp',
             (AF_INET6, SOCK_DGRAM): 'udp6',
             }
-        self.templ = '%-5s %-21s %-20s %-15s %-10s %-20s %-24s %s' #String formatting
+        self.templ = '%-5s %-5s %-5s %-5s %-5s %-5s %-5s %s' #String formatting
         self.proc_names = {}
         self.proc_cmd = {}
         self.proc_time = {}
       
         
         def capture_action():
-            print(self.start+'\nPress Ctrl+c to properly stop of the tool!')
+            print(self.start+'\nPress Ctrl+c to properly stop of the tool!\nDON\'T OPEN THE CSV FILE WHILE THE TOOL IS RUNNING!')
             with open(self.tempfile, 'w') as f:
                 f.write(self.start + '\n'+ self.templ % \
-                    ('Proto', 'Local address', 'Remote address', 'Status',\
-                     'PID', 'Program name', 'Time started', 'Command line') + '\n')            
+                    ('Proto|', 'Local address|', 'Remote address|', 'Status|',\
+                     'PID|', 'Program name|', 'Time started|', 'Command line') + '\n')            
             while self.current_time <= self.time_to_stop:
                 for p in psutil.process_iter(attrs=['pid', 'name', 'cmdline']):
-                    self.proc_names[p.info['pid']] = p.info['name'] #assign key as pid and value as name
+                    self.proc_names[p.info['pid']] = p.info['name'] #assign key as pid and value as process name
                     self.proc_cmd[p.info['pid']] = p.info['cmdline']
                     self.proc_time[p.info['pid']] = str(p).split(',')[2][9:].replace(')','')
                 for c in psutil.net_connections(kind='inet'):
@@ -111,9 +112,9 @@ class NstatLogger:
                                     self.raddr = '%s:%s' % (c.raddr)
                                 with open(self.tempfile ,'a+') as f:
                                         f.writelines((self.templ % \
-                                            (self.proto_map[(c.family, c.type)], laddr, self.raddr, \
-                                                c.status, c.pid or self.AD, self.proc_names.get(c.pid, '?')[:22],\
-                                                self.proc_time.get(c.pid, '?'), self.proc_cmd.get(c.pid, '?')), '\n'))
+                                            (self.proto_map[(c.family, c.type)]+'|', laddr+'|', self.raddr+'|', \
+                                                c.status+'|', str(c.pid)+'|' or self.AD+'|', self.proc_names.get(c.pid, '?')+'|',\
+                                                self.proc_time.get(c.pid, '?')+'|', self.proc_cmd.get(c.pid, '?'))+'|', '\n'))
                                 self.uniq(self.tempfile)
                 time.sleep(self.interval)
                 if self.current_time == self.time_to_stop:
@@ -148,14 +149,23 @@ class NstatLogger:
                 if line not in lines_seen: # not a duplicate
                     outfile.write(line)
                     lines_seen.add(line)  
-        
+        with open(self.filename, 'r') as txt_file: #make csv file from the txt file
+            stripped = (line.strip() for line in txt_file)
+            lines = (line.split("|") for line in stripped if line)
+            with open(self.filename[:-3]+'csv', 'w') as csv_file:
+                writer = csv.writer(csv_file)
+                writer.writerows(lines)        
     
     def end(self):
-        end = ('\n'+'Ended: ' + time.ctime()[:19])      
-        with open(self.filename, 'a') as a:
-            a.write(end)
+        end_txt = ('\n'+'Ended: ' + time.ctime()[:19])      
+        with open(self.filename, 'a') as txt_file_end:
+            txt_file_end.write(end_txt)
+        end_csv = ['Ended: ' + time.ctime()[:19]]
+        with open(self.filename[:-3]+'csv', 'a') as csv_file_end:
+            writer = csv.writer(csv_file_end)
+            writer.writerow(end_csv)    
         os.remove(self.tempfile) #remove the non-uniq log file
-        sys.exit(end)
+        sys.exit(end_txt)
                 
         
 
