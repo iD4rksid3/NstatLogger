@@ -29,7 +29,8 @@ or download the stand alone Windows exe files from [release](https://github.com/
 
 or compile it yourself using pyinstaller:
 ```
-$ pyinstaller -i .\rsc\file.ico --hidden-import=requests -F NstatLogger.py
+$ pyinstaller -i .\rsrc\file.ico -F NstatLogger.py
+$ pyinstaller -i .\rsrc\file2.ico --hidden-import=requests  -F NstatResolver.py
 ```
 ### Usage:
 The tool can run without administrator/root priviliage, but it will not be able to collect all the informtion
@@ -58,8 +59,8 @@ optional arguments:
 Example:
 ```
 $ python3 NstatLogger.py -t 2000 -i 5 # will run the tool for 2000 seconds with a 5 second interval/refresh
-# a NstatLogger-xxx-uniq.log file will be writen to current directory
-$ python3 NstatResolver.py NstatLogger-xxx.log # Performe reverse IP lookup on the output
+# a NstatLogger-xxx.csv file will be writen to current directory
+$ python3 NstatResolver.py NstatLogger-xxx.csv # Performe reverse IP lookup and dns history on the output
 ```
 :exclamation: **Note: Output from -r (resolve) can get messy if dns history or ssl alternative names is huge!, use a tool like notepad++ or mcedit to view the file**
 
