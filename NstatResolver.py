@@ -4,6 +4,7 @@
 # NstatResolver: Resolve IP addresses in NstatLogger log file along with dns history
 # version: 1.5
 
+
 import os
 import re
 import ssl
