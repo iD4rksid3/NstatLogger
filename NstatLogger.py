@@ -4,6 +4,7 @@
 # NstatLogger: netstat logger of all TCP/IP and partially UDP communication from a host
 # version: 1.5
 
+
 import os
 import sys
 import csv
