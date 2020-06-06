@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['NstatLogger\\NstatResolver.py'],
+a = Analysis(['NstatLogger\\NstatResolverbar.py'],
              pathex=['C:\\%userprofile%\\Desktop'],
              binaries=[],
              datas=[],
@@ -23,12 +23,16 @@ exe = EXE(pyz,
           a.zipfiles,
           a.datas,
           [],
-          name='NstatResolver',
+          name='NstatResolverbar',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
+<<<<<<< HEAD
           console=True , icon='NstatLogger\\rsrc\\file2.ico')
 
+=======
+          console=True , icon='nstatlogger\\rsrc\\file2.ico')
+>>>>>>> parent of 30e705c... 	modified:   NstatLogger.py

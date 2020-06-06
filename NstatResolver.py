@@ -2,14 +2,13 @@
 # -*- coding: utf-8 -*-
 # Auther: 2020, Mayed Alm
 # NstatResolver: Resolve IP addresses in NstatLogger log file along with dns history
-# version: 1.5
+# version: 1.2
 
 
 import os
 import re
 import ssl
 import sys
-import csv
 from alive_progress import alive_bar
 import json
 import socket
@@ -25,7 +24,7 @@ class NstatResolver:
   /  |/ / ___/ __/ __ `/ __/ /_/ / _ \/ ___/ __ \/ / | / / _ \/ ___/
  / /|  (__  ) /_/ /_/ / /_/ _, _/  __(__  ) /_/ / /| |/ /  __/ /    
 /_/ |_/____/\__/\__,_/\__/_/ |_|\___/____/\____/_/ |___/\___/_/     
-                                                v1.5    ©Mayed.alm    
+                                                v1.2    ©Mayed.alm    
 
             '''
 
@@ -42,12 +41,11 @@ class NstatResolver:
 
 
     def reslove_func(self,filename): #func to performe reverse ip lookup and dns history/ ssl alt names
+        templ = '%-20s %-20s %-60s %-20s'
         filename_base_name = os.path.basename(filename)
-        ip_list = []
+        ipLst = []
         dns_alt_names = []
         prog_name_lst = []
-        revers_lookup = {}
-        notFound = '-'
         try:
             choice = int(input('Choose option:\n 1) Search for DNS history through Threat Crowd and VirusTotal APIs (recommended).\
             \n 2) Get SSL certificate alternative names (not recommended for suspecious connections as it connects to each IP).\n:'))
@@ -55,35 +53,36 @@ class NstatResolver:
             sys.exit('Unknown option!')
         #if not filename.startswith('NstatLogger'):
             #sys.exit('ERROR: Unable to read file, make sure it\'s an NstatLogger log file!')
-        with open(filename, 'r') as file_in:
-            with open('Resolved-'+filename_base_name, 'w') as file_out_csv: #csv file out
-                writer = csv.writer(file_out_csv)
+        with open(filename, 'rt') as fin:
+            with open('Resolved-'+filename_base_name, 'w') as fout:
                 if choice == 1:
-                    writer.writerows([('Program name','Remote address','Domain name','DNS history')]) 
+                    fout.write(templ % ('Program name', 'Remote address', 'Domain name', 'DNS history') + '\n')
                 elif choice == 2:
-                    writer.writerows([('Program name', 'Remote address', 'Domain name', 'SSL alternative names')])
+                    fout.write(templ % ('Program name', 'Remote address', 'Domain name', 'SSL alternative names') + '\n')
                 else:
                     sys.exit('Unknown option!')
                 print('Resolving...')
-                line_counter = 0
-                for lines in file_in.readlines()[3:-2]:
-                    try:
-                        ip_addr = lines.split(',')[2]
-                        ip_addr = ip_addr.rsplit(':',1)[0].strip() #get the ip only without the port
-                        program_name = lines.split(',')[5] #get the program name
-                    except:
+                f = fin.readlines()
+                f = f[3:-2]
+                i = 0
+                for line in f:
+                    ip = line[27:47]
+                    ip = ip.split(':')
+                    prog_name = line[76:95]
+                    revers_lookup = {}
+                    notFound = '-'
+                    ip[0] = ip[0].replace(' ','')
+                    if len(ip[0].strip()) == 0:
                         continue
-                    if ip_addr in ip_list:
-                        continue
-                    if lines.split(',')[2] == ' ': # ignoring program names with no remote ip address (e.g udp)
-                        continue
-                    else:
-                        prog_name_lst.append(program_name) #append program names to the prog_name_lst
-                        ip_list.append(ip_addr) #append ip addresses to the ip_list
-                        line_counter += 1                     
-
-                with alive_bar(line_counter) as bar:
-                    for ip, prog in zip( ip_list,prog_name_lst):
+                    if ip[0] in ipLst:
+                        continue  
+                    prog_name_lst.append(prog_name)
+                    ipLst.append(ip[0])
+                    i += 1
+                #with tqdm(total=i) as pbar:
+                #with progressbar.ProgressBar(max_value=i) as bar:
+                with alive_bar(i) as bar:
+                    for ip, prog in zip(ipLst,prog_name_lst):
                         try:
                             revers_lookup.update({ip: socket.gethostbyaddr(ip)})                
                         except (socket.herror, socket.gaierror, OSError):
@@ -95,15 +94,15 @@ class NstatResolver:
                             vt_api = requests.get(f"https://www.virustotal.com/vtapi/v2/ip-address/report?apikey={self.vt_api_key}&ip={ip}")
                             try:
                                 vt_apiJSON = json.loads(vt_api.text)
-                                writer.writerows([(prog, ip, revers_lookup[ip], vt_apiJSON['resolutions'], threat_crowdJSON['resolutions'][::-1])])
+                                fout.writelines(templ % (f'{prog}', f'{ip}', f'{revers_lookup[ip]}', f"{vt_apiJSON['resolutions']}" f"{threat_crowdJSON['resolutions'][::-1]}") + '\n')
                                 bar()
                             except:
                                 pass
                                 try:
-                                    writer.writerows([(prog, ip, revers_lookup[ip], threat_crowdJSON['resolutions'][::-1])])
+                                    fout.writelines(templ % (f'{prog}', f'{ip}', f'{revers_lookup[ip]}', f"{threat_crowdJSON['resolutions'][::-1]}") + '\n')
                                     bar()
                                 except KeyError:
-                                    writer.writerows([(prog, ip, revers_lookup[ip])])
+                                    fout.writelines(templ % (f'{prog}', f'{ip}', f'{revers_lookup[ip]}', '-') + '\n')
                                     bar()
                                     continue
                         elif choice == 2:
@@ -112,16 +111,17 @@ class NstatResolver:
                                     reqs.OpenSSL.crypto.FILETYPE_PEM,
                                     reqs.ssl.get_server_certificate((ip, 443)))
                                 dns_alt_names = reqs.get_subj_alt_name(x509)
-                                writer.writerows([(prog, ip, revers_lookup[ip], dns_alt_names)])
+                                fout.writelines(templ % (f'{prog}', f'{ip}', f'{revers_lookup[ip]}', f'{dns_alt_names}') + '\n')
                                 bar()
                             except (socket.gaierror,ssl.SSLError,TimeoutError,ConnectionRefusedError,OSError):
-                                writer.writerows([(prog, ip, revers_lookup[ip], '-')])
+                                fout.writelines(templ % (f'{prog}', f'{ip}', f'{revers_lookup[ip]}', '-') + '\n')
                                 bar() 
                                 continue
         return revers_lookup
 
 
     def reslove_func_ip(self,ip): #func to performe reverse ip lookup and dns history/ ssl alt names
+        templ2 = '%-20s %-20s %-60s'
         ipv4 = re.compile('^(?:(?:[0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}(?:[0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$')
         match_ip = ipv4.match(ip)
         try:
@@ -129,12 +129,11 @@ class NstatResolver:
             \n 2) Get SSL certificate alternative names (not recommended for suspecious connections as it connects to each IP).\n:'))
         except ValueError:
             sys.exit('Unknown option!')
-        with open('Resolved-'+ip.replace(':','')+".csv", 'w') as file_out_csv:
-            writer = csv.writer(file_out_csv)            
+        with open('Resolved-'+ip+".txt", 'w') as fout:
             if choice == 1:
-                writer.writerows([('Remote host', 'Domain name/IP', 'DNS history')]) 
+                fout.write(templ2 % ('Remote host', 'Domain name/IP', 'DNS history') + '\n')
             elif choice == 2:
-                writer.writerows([('Remote host', 'Domain name/IP', 'SSL alternative names')])
+                fout.write(templ2 % ('Remote host', 'Domain name/IP', 'SSL alternative names') + '\n')
             else:
                 sys.exit('Unknown option!')
             print('Resolving...')
@@ -155,26 +154,23 @@ class NstatResolver:
                 vt_api = requests.get(f"https://www.virustotal.com/vtapi/v2/ip-address/report?apikey={self.vt_api_key}&ip={ip}")
                 try:
                     vt_apiJSON = json.loads(vt_api.text)
-                    writer.writerows([(ip, revers_lookup, vt_apiJSON['resolutions'], threat_crowdJSON['resolutions'][::-1])])
+                    fout.writelines(templ2 % (f'{ip}', f'{revers_lookup}', f"{vt_apiJSON['resolutions']}" f"{threat_crowdJSON['resolutions'][::-1]}") + '\n')
                 except:
                     print("No or incorrect VT api key supplied")
                     try:
-                        writer.writerows([(ip, revers_lookup, threat_crowdJSON['resolutions'][::-1])])
-                        
+                        fout.writelines(templ2 % (f'{ip}', f'{revers_lookup}', f"{threat_crowdJSON['resolutions'][::-1]}") + '\n')
                     except KeyError:
                         print("error")
-                        writer.writerows([(ip, revers_lookup, '-')])
-                        
+                        fout.writelines(templ2 % (f'{ip}', f'{revers_lookup}', '-') + '\n')
             elif choice == 2:
                 try:
                     x509 = reqs.OpenSSL.crypto.load_certificate(
                         reqs.OpenSSL.crypto.FILETYPE_PEM,
                         reqs.ssl.get_server_certificate((ip, 443)))
                     dns_alt_names = reqs.get_subj_alt_name(x509)
-                    writer.writerows([(ip, revers_lookup, dns_alt_names)])
-                    
+                    fout.writelines(templ2 % (f'{ip}', f'{revers_lookup}', f'{dns_alt_names}') + '\n')
                 except (socket.gaierror,ssl.SSLError,TimeoutError,ConnectionRefusedError,OSError):
-                    writer.writerows([(ip, revers_lookup, '-')])                    
+                    fout.writelines(templ2 % (f'{ip}', f'{revers_lookup}', '-') + '\n') 
         return revers_lookup        
 
 
