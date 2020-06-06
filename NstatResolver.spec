@@ -31,3 +31,4 @@ exe = EXE(pyz,
           upx_exclude=[],
           runtime_tmpdir=None,
           console=True , icon='NstatLogger\\rsrc\\file2.ico')
+
