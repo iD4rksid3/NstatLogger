@@ -3,7 +3,10 @@
 # Auther: 2020, Mayed Alm
 # NstatLogger: netstat logger of all TCP/IP and UDP communication from a host
 # version: 1.2
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 30e705c... 	modified:   NstatLogger.py
 
 import os
 import sys
