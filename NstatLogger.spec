@@ -3,8 +3,8 @@
 block_cipher = None
 
 
-a = Analysis(['NstatLogger1.1.py'],
-             pathex=['C:\\%userprofile%\\Desktop\\NstatLogger'],
+a = Analysis(['NstatLogger\\NstatLogger.py'],
+             pathex=['C:\\%userprfile%\\Desktop'],
              binaries=[],
              datas=[],
              hiddenimports=[],
@@ -30,17 +30,4 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
           console=True , icon='NstatLogger\\rsrc\\file.ico')
-
-=======
-          console=True , icon='rsrc\\file.ico')
->>>>>>> parent of 30e705c... 	modified:   NstatLogger.py
-=======
-          console=True , icon='rsrc\\file.ico')
->>>>>>> parent of 30e705c... 	modified:   NstatLogger.py
-=======
-          console=True , icon='rsrc\\file.ico')
->>>>>>> parent of 30e705c... 	modified:   NstatLogger.py
