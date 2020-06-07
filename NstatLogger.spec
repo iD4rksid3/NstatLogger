@@ -32,8 +32,12 @@ exe = EXE(pyz,
           runtime_tmpdir=None,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
           console=True , icon='NstatLogger\\rsrc\\file.ico')
 
+=======
+          console=True , icon='rsrc\\file.ico')
+>>>>>>> parent of 30e705c... 	modified:   NstatLogger.py
 =======
           console=True , icon='rsrc\\file.ico')
 >>>>>>> parent of 30e705c... 	modified:   NstatLogger.py

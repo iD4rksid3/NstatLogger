@@ -4,7 +4,10 @@
 # NstatResolver: Resolve IP addresses in NstatLogger log file along with dns history
 # version: 1.2
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 30e705c... 	modified:   NstatLogger.py
 =======
 >>>>>>> parent of 30e705c... 	modified:   NstatLogger.py
 
