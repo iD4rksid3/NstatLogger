@@ -61,7 +61,7 @@ class NstatLogger:
             time.sleep(1)
             print('Running (seconds): {:d}\r'.format(self.current_time), end='')
             if self.current_time == self.time_to_stop:
-                self.mutex.release()
+                self.mutex.release() #releasing the lock for the threading to allow application to continue execution
                 break
                 
     
@@ -118,7 +118,7 @@ class NstatLogger:
                                 self.uniq(self.tempfile)
                 time.sleep(self.interval)
                 if self.current_time == self.time_to_stop:
-                    self.mutex.acquire()
+                    self.mutex.acquire() #locking (waiting) for the other thread to terminate
                     break
                 else:
                     continue
@@ -135,8 +135,8 @@ class NstatLogger:
                 while self.current_time <= self.time_to_stop:
                     time.sleep(self.interval)
                     if self.current_time == self.time_to_stop:
-                        th1.join()
-                        th2.join()
+                        th1.join() #wait until t1 terminates (make sure its finished)
+                        th2.join() #wait until t2 terminates (make sure its finished)
                         self.end()
                     
         main_threads()
