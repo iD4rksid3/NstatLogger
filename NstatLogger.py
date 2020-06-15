@@ -169,14 +169,12 @@ class NstatLogger:
                 
         
 
-def main():
+if __name__=='__main__':
     try:
         n = NstatLogger()
         n.cmd_args()
         n.capture()
     except KeyboardInterrupt:
         n.end()
-if __name__=='__main__':
-        main()
     
     

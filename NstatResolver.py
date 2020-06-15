@@ -177,10 +177,8 @@ class NstatResolver:
         return revers_lookup        
 
 
-def main():
+if __name__=='__main__':
     try:
         n = NstatResolver()
     except IndexError:
-        input("Done!, press enter to continue . . .")
-if __name__=='__main__':
-    main()
+        input("Done!, press enter to continue ...")
