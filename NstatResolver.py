@@ -34,6 +34,7 @@ class NstatResolver:
         print(self.banner)
         if len(sys.argv) < 2:
             ip_input = input("Enter hostname/IP: ")
+            ip_input = ip_input.strip()
             self.reslove_func_ip(ip_input)
         elif len(sys.argv) > 2:
             sys.exit(
