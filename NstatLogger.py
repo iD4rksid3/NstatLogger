@@ -113,8 +113,12 @@ class NstatLogger:
                     # assign key as pid and value as process name
                     self.proc_names[p.info['pid']] = p.info['name']
                     self.proc_cmd[p.info['pid']] = p.info['cmdline']
-                    self.proc_time[p.info['pid']] = str(
-                        p).split(',')[2][9:].replace(')', '')
+                    #trying to get the process start time, if not put '?'
+                    try:
+                        self.proc_time[p.info['pid']] = str(
+                        p).split(',')[2][9:].replace(')', '') 
+                    except IndexError:
+                        self.proc_time[p.info['pid']] = '?'
                 for c in psutil.net_connections(kind='inet'):
                     if c.status == psutil.CONN_ESTABLISHED\
                        or c.status == psutil.CONN_SYN_SENT\
