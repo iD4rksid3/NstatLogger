@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Auther: 2020, Mayed Alm
 # NstatLogger: netstat logger of all TCP/IP and partially UDP communication from a host
-# version: 1.5
+# version: 1.7
 
 import os
 import sys
@@ -24,19 +24,19 @@ class NstatLogger:
   /  |/ / ___/ __/ __ `/ __/ /   / __ \/ __ `/ __ `/ _ \/ ___/
  / /|  (__  ) /_/ /_/ / /_/ /___/ /_/ / /_/ / /_/ /  __/ /
 /_/ |_/____/\__/\__,_/\__/_____/\____/\__, /\__, /\___/_/
-                                     /____//____/ v1.5    ©Mayed.alm
+                                     /____//____/ v1.7    ©Mayed.alm
 
             '''
 
     def __init__(self):
         self.start = 'Started: ' + \
-            time.ctime()[:19] + '\n'  # print the start time
+            time.ctime()[:19] # print the start time #print the start time
         if os.name == 'nt':
             self.tempdir = tempfile.gettempdir() + '\\'
         elif os.name == 'posix':
             self.tempdir = tempfile.gettempdir() + '/'
         self.filename = 'NstatLogger-' + \
-            time.ctime()[11:19].replace(':', '-') + '.log'  # file name with time
+            self.start[20:28].replace(':', '-') + '.log'  # file name with time
         self.tempfile = self.tempdir + self.filename
         self.mutex = threading.Lock()  # Mutex to control threads
 
@@ -100,21 +100,24 @@ class NstatLogger:
                     '\n' +
                     self.templ %
                     ('Proto|',
-                     'Local address|',
-                     'Remote address|',
+                     'Local Address|',
+                     'Remote Address|',
                      'Status|',
                      'PID|',
-                     'Program name|',
-                     'Time started|',
-                     'Command line') +
-                    '\n')
+                     'Program Name|',
+                     'Time Started|',
+                     'Command Line|\n'))
             while self.current_time <= self.time_to_stop:
                 for p in psutil.process_iter(attrs=['pid', 'name', 'cmdline']):
                     # assign key as pid and value as process name
                     self.proc_names[p.info['pid']] = p.info['name']
                     self.proc_cmd[p.info['pid']] = p.info['cmdline']
-                    self.proc_time[p.info['pid']] = str(
-                        p).split(',')[2][9:].replace(')', '')
+                    #trying to get the process start time, if not put '?'
+                    try:
+                        self.proc_time[p.info['pid']] = str(
+                        p).split(',')[2][9:].replace(')', '') 
+                    except IndexError:
+                        self.proc_time[p.info['pid']] = '?'
                 for c in psutil.net_connections(kind='inet'):
                     if c.status == psutil.CONN_ESTABLISHED\
                        or c.status == psutil.CONN_SYN_SENT\
@@ -146,7 +149,7 @@ class NstatLogger:
                                                       '|', self.proc_names.get(c.pid, '?') +
                                                       '|', self.proc_time.get(c.pid, '?') +
                                                       '|', self.proc_cmd.get(c.pid, '?')) +
-                                                  '|', '\n'))
+                                                   '\n'))
                                 self.uniq(self.tempfile)
                 time.sleep(self.interval)
                 if self.current_time == self.time_to_stop:
@@ -181,20 +184,21 @@ class NstatLogger:
                     outfile.write(line)
                     lines_seen.add(line)
         with open(self.filename, 'r') as txt_file:  # make csv file from the txt file
-            stripped = (line.strip() for line in txt_file)
-            lines = (line.split("|") for line in stripped if line)
-            with open(self.filename[:-3] + 'csv', 'w') as csv_file:
+            stripped = (line.replace(' ', '') for line in txt_file) #remove empty spaces
+            lines = (line.split("|") for line in stripped if line) #split words with | for making a csv file
+            next(lines) #skip first line/row of start time
+            clean_csv_List = [] #clean csv rows so that NstatAnalyzer understands it
+            for line in lines:
+                line[-1] = line[-1][:-1]
+                clean_csv_List.append(line)
+            with open(self.filename[:-3] + 'csv', 'w', newline='\n') as csv_file:
                 writer = csv.writer(csv_file)
-                writer.writerows(lines)
+                writer.writerows(clean_csv_List)
 
     def end(self):
-        end_txt = ('\n' + 'Ended: ' + time.ctime()[:19])
+        end_txt = ('Ended: ' + time.ctime()[:19])
         with open(self.filename, 'a') as txt_file_end:
             txt_file_end.write(end_txt)
-        end_csv = ['Ended: ' + time.ctime()[:19]]
-        with open(self.filename[:-3] + 'csv', 'a') as csv_file_end:
-            writer = csv.writer(csv_file_end)
-            writer.writerow(end_csv)
         os.remove(self.tempfile)  # remove the non-uniq log file
         sys.exit(end_txt)
 

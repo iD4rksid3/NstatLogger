@@ -1,4 +1,6 @@
-psutil==5.6.7
 requests==2.22.0
+pandas==1.0.5
+psutil==5.6.7
 alive_progress==1.4.4
-pyopenssl==19.1.0
+networkx==2.4
+matplotlib==3.3.0

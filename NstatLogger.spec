@@ -3,8 +3,8 @@
 block_cipher = None
 
 
-a = Analysis(['NstatLogger\\NstatLogger.py'],
-             pathex=['C:\\%userprfile%\\Desktop'],
+a = Analysis(['NstatLogger.py'],
+             pathex=['C:\\%userprofile%\\Desktop\\NstatLogger-1.7'],
              binaries=[],
              datas=[],
              hiddenimports=[],
@@ -30,4 +30,4 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=True , icon='NstatLogger\\rsrc\\file.ico')
+          console=True , icon='rsrc\\file.ico')
