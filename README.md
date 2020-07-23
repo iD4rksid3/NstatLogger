@@ -19,7 +19,7 @@ NstatResolver.py can later be used against the NstatLogger.csv file to perform r
 ## NstatAnalyzer
 NstatAnalyzer.py can be used against NstatLogger.csv to perform a relational graph connecting process names with the remote addresses
 ![Screenshot](NstatAnalyzerSC.jpg)
-![alt text](https://github.com/id4rksid3/NstatLogger.git/NstatAnalyzerSC.jpg?raw=true)
+
 ### Dependencies:
 The tool depends on the awsome [psutil](https://github.com/giampaolo/psutil) python module , [requests](https://pypi.org/project/requests/) module, pandas, networkx and matplotlib.
 
