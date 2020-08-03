@@ -30,7 +30,7 @@ class NstatResolver:
             '''
 
     def __init__(self):
-        self.vt_api_key = "700bf033bf277acf9c24f9fab49b471b128e3f8037f911f66202af03ae2e646e"  # Edit with your virus total API key: "xxxxxxxxxxxxxxxxx"
+        self.vt_api_key = None  # Edit with your virus total API key: "xxxxxxxxxxxxxxxxx"
         print(self.banner)
         if len(sys.argv) < 2:
             ip_input = input("Enter hostname/IP: ")
