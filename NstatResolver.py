@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Auther: 2020, Mayed Alm
 # NstatResolver: Resolve IP addresses in NstatLogger log file along with dns history
-# version: 1.5
+# version: 1.6
 
 import os
 import re
@@ -25,12 +25,12 @@ class NstatResolver:
   /  |/ / ___/ __/ __ `/ __/ /_/ / _ \/ ___/ __ \/ / | / / _ \/ ___/
  / /|  (__  ) /_/ /_/ / /_/ _, _/  __(__  ) /_/ / /| |/ /  __/ /
 /_/ |_/____/\__/\__,_/\__/_/ |_|\___/____/\____/_/ |___/\___/_/
-                                                v1.5    ©Mayed.alm
+                                                v1.6    ©Mayed.alm
 
             '''
 
     def __init__(self):
-        self.vt_api_key = ""  # Edit with your virus total API key
+        self.vt_api_key = "700bf033bf277acf9c24f9fab49b471b128e3f8037f911f66202af03ae2e646e"  # Edit with your virus total API key: "xxxxxxxxxxxxxxxxx"
         print(self.banner)
         if len(sys.argv) < 2:
             ip_input = input("Enter hostname/IP: ")
@@ -83,7 +83,7 @@ class NstatResolver:
                     if ip_addr in ip_list:
                         continue
                     if lines.split(
-                            ',')[2] == ' ':  # ignoring program names with no remote ip address (e.g udp)
+                        ',')[2] == ' ':  # ignoring program names with no remote ip address (e.g udp)
                         continue
                     else:
                         # append program names to the prog_name_lst
@@ -104,27 +104,47 @@ class NstatResolver:
                             threat_crowdAPI = requests.get(
                                 "http://www.threatcrowd.org/searchApi/v2/ip/report/", {"ip": ip})
                             threat_crowdJSON = json.loads(threat_crowdAPI.text)
-                            vt_api = requests.get(
-                                f"https://www.virustotal.com/vtapi/v2/ip-address/report?apikey={self.vt_api_key}&ip={ip}")
-                            try:
-                                vt_apiJSON = json.loads(vt_api.text)
-                                writer.writerows([(prog,
-                                                   ip,
-                                                   revers_lookup[ip],
-                                                   vt_apiJSON['resolutions'],
-                                                   threat_crowdJSON['resolutions'][::-1])])
-                                bar()
-                            except BaseException:
-                                pass
+                            if self.vt_api_key is not None:
+                                vt_api = requests.get(
+                                        f"https://www.virustotal.com/vtapi/v2/ip-address/report?apikey={self.vt_api_key}&ip={ip}")
                                 try:
-                                    writer.writerows(
-                                        [(prog, ip, revers_lookup[ip], threat_crowdJSON['resolutions'][::-1])])
+                                    vt_apiJSON = json.loads(vt_api.text)
+                                    writer.writerows([(prog,
+                                                       ip,
+                                                       revers_lookup[ip],
+                                                       vt_apiJSON['resolutions'],
+                                                       threat_crowdJSON['resolutions'][::-1])])
                                     bar()
-                                except KeyError:
-                                    writer.writerows(
-                                        [(prog, ip, revers_lookup[ip])])
+                                except BaseException:
+                                    pass
+                                    try:
+                                        writer.writerows(
+                                            [(prog, ip, revers_lookup[ip], threat_crowdJSON['resolutions'][::-1])])
+                                        bar()
+                                    except KeyError:
+                                        writer.writerows(
+                                            [(prog, ip, revers_lookup[ip])])
+                                        bar()
+                                        continue
+                            else:
+                                try:
+                                    writer.writerows([(prog,
+                                                       ip,
+                                                       revers_lookup[ip],
+                                                       threat_crowdJSON['resolutions'][::-1])])
                                     bar()
-                                    continue
+                                except BaseException:
+                                    pass
+                                    try:
+                                        writer.writerows(
+                                            [(prog, ip, revers_lookup[ip], threat_crowdJSON['resolutions'][::-1])])
+                                        bar()
+                                    except KeyError:
+                                        writer.writerows(
+                                            [(prog, ip, revers_lookup[ip])])
+                                        bar()
+                                        continue
+
                         elif choice == 2:
                             try:
                                 x509 = reqs.OpenSSL.crypto.load_certificate(
@@ -178,23 +198,39 @@ class NstatResolver:
                 threat_crowdAPI = requests.get(
                     "http://www.threatcrowd.org/searchApi/v2/ip/report/", {"ip": ip})
                 threat_crowdJSON = json.loads(threat_crowdAPI.text)
-                vt_api = requests.get(
-                    f"https://www.virustotal.com/vtapi/v2/ip-address/report?apikey={self.vt_api_key}&ip={ip}")
-                try:
-                    vt_apiJSON = json.loads(vt_api.text)
-                    writer.writerows([(ip,
-                                       revers_lookup,
-                                       vt_apiJSON['resolutions'],
-                                       threat_crowdJSON['resolutions'][::-1])])
-                except BaseException:
-                    print("No or incorrect VT api key supplied")
+                if self.vt_api_key is not None:
+                    vt_api = requests.get(
+                            f"https://www.virustotal.com/vtapi/v2/ip-address/report?apikey={self.vt_api_key}&ip={ip}")
                     try:
-                        writer.writerows(
-                            [(ip, revers_lookup, threat_crowdJSON['resolutions'][::-1])])
+                        vt_apiJSON = json.loads(vt_api.text)
+                        writer.writerows([(prog,
+                                           ip,
+                                           revers_lookup[ip],
+                                           vt_apiJSON['resolutions'],
+                                           threat_crowdJSON['resolutions'][::-1])])
+                    except BaseException:
+                        pass
+                        try:
+                            writer.writerows(
+                                [(prog, ip, revers_lookup[ip], threat_crowdJSON['resolutions'][::-1])])
+                        except KeyError:
+                            writer.writerows(
+                                [(prog, ip, revers_lookup[ip])])
 
-                    except KeyError:
-                        print("error")
-                        writer.writerows([(ip, revers_lookup, '-')])
+                else:
+                    try:
+                        writer.writerows([(prog,
+                                               ip,
+                                               revers_lookup[ip],
+                                               threat_crowdJSON['resolutions'][::-1])])
+                    except BaseException:
+                        pass
+                        try:
+                            writer.writerows(
+                                    [(prog, ip, revers_lookup[ip], threat_crowdJSON['resolutions'][::-1])])
+                        except KeyError:
+                            writer.writerows(
+                                    [(prog, ip, revers_lookup[ip])])
 
             elif choice == 2:
                 try:

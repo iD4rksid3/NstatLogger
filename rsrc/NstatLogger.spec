@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['NstatLogger.py'],
-             pathex=['C:\\%userprofile%\\Desktop\\NstatLogger-1.7'],
+             pathex=['C:\\Users\\mayed\\Desktop\\NstatLogger'],
              binaries=[],
              datas=[],
              hiddenimports=[],
