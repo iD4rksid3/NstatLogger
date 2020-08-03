@@ -28,7 +28,7 @@ def argparse():
     print(banner)
     if len(sys.argv) < 2:
         sys.exit('[!] NstatAnalyzer: netstat analyzing tool to work with analyzing NstatLogger csv files.\n[+] Usage: NstatAnalyzer <file.csv>')
-    elif sys.argv == '-h':
+    elif sys.argv[1] == '-h':
         sys.exit('[!] NstatAnalyzer: netstat analyzing tool to work with analyzing NstatLogger csv files.\n[+] Usage: NstatAnalyzer <file.csv>')
     elif len(sys.argv) > 2:
         sys.exit('[!] NstatAnalyzer: netstat analyzing tool to work with analyzing NstatLogger csv files.\n[+] Usage: NstatAnalyzer <file.csv>')
