@@ -31,8 +31,17 @@ class NstatResolver:
 
     def __init__(self):
         config = configparser.ConfigParser()
-        config.read('config.ini')        
-        self.vt_api_key = config["API_KEY"]["virus_total"]  # Edit config file with your virus total API key.
+        config.read('config.ini')     
+        def write_config_file():
+            config.write(open('config.ini', 'w'))        
+        try:
+            self.vt_api_key = config["API_KEY"]["virus_total"]  # Edit config file with your virus total API key.
+        except:
+            config["API_KEY"] = {
+                "virus_total": "''"
+                }
+            write_config_file()            
+        self.vt_api_key = config["API_KEY"]["virus_total"]
         self.loop = asyncio.get_event_loop()
         self.resolver = aiodns.DNSResolver(loop=self.loop)        
         print(self.banner)
@@ -42,8 +51,7 @@ class NstatResolver:
         elif len(sys.argv) > 2:
             sys.exit(
                 input("[!] Usage: python3 NstatResolver.py NstatLogger-00-00-00.csv"))
-        self.reslove_func(sys.argv[1])
-        
+        self.reslove_func(sys.argv[1])        
          
     def choice(self):
         try:
