@@ -4,4 +4,4 @@ requests==2.24.0
 networkx==2.4
 matplotlib==3.2.2
 aiodns==2.0.0
-aiohttp==3.6.2
+aiohttp==3.7.4
