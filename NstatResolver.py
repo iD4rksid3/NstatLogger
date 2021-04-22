@@ -98,9 +98,12 @@ class NstatResolver:
                 header = f.read(4)
                 header = binascii.hexlify(header)
         except FileNotFoundError:
-            exit("[!] File not found!")
+            input("\n[!] File not found!")
+            sys.exit()
+            
         if header != b'50726f74':
-            exit("ERROR: make sure it is NstatLogger log file")
+            input("\nERROR: make sure it is NstatLogger log file")
+            sys.exit()
         ip_list = []
         dns_alt_names = []
         prog_name_lst = []
@@ -128,7 +131,7 @@ class NstatResolver:
                     if ip_addr in ip_list:
                         continue
                     if lines.split(
-                        ',')[2] == ' ':  # ignoring program names with no remote ip address (e.g udp)
+                        ',')[2] == '':  # ignoring program names with no remote ip address (e.g udp)
                         continue
                     else:
                         # append program names to the prog_name_lst
