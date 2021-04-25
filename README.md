@@ -14,7 +14,12 @@ NstatLogger.py or netstat logger is a multi platform (Windows/ Linux) python3 sc
 ## NstatResolver
 NstatResolver.py can later be used against the NstatLogger.csv file to perform reverse IP lookup (using system dns) and get more info using one of the following:
   - Get dns history of an IP through [Threat Crowd API](https://github.com/AlienVault-OTX/ApiV2) and [VirusTotal API](https://developers.virustotal.com/v3.0/reference) which is recommended as it is passively collect data (without connecting to the remote addresses).
-  - Get SSL alternative names through the use of python modules (pyopenssl, requests) which will connect to each remote IP and get the list (it is more accurate, but its not a good practice when doing an investigation) use it if the passive approch doesn't get enough info, and use it behind proxy/vpn. 
+  - Get SSL alternative names through the use of python modules (pyopenssl, requests) which will connect to each remote IP and get the list (it is more accurate, but its not a good practice when doing an investigation) use it if the passive approch doesn't get enough info, and use it behind proxy/vpn.
+  - The VT api key (and maybe others in future) can be supplied to a config file with the following syntax:
+```
+[API_KEY]
+virus_total = 123456789
+```
 
 ## NstatAnalyzer
 NstatAnalyzer.py can be used against NstatLogger.csv to perform a relational graph connecting process names with the remote addresses
