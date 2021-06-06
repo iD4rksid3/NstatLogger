@@ -128,7 +128,7 @@ class NstatResolver:
                             ',')[5]  # get the program name
                     except BaseException:
                         continue
-                    if ip_addr in ip_list:
+                    if ip_addr in ip_list and program_name in prog_name_lst:
                         continue
                     if lines.split(
                         ',')[2] == '':  # ignoring program names with no remote ip address (e.g udp)
@@ -166,7 +166,7 @@ class NstatResolver:
                                     writer.writerows([(prog,
                                                    ip,
                                                    revers_lookup[ip],
-                                                   tc[indx_tc:],
+                                                   "{"+tc[indx_tc:],
                                                    vt[indx_start_vt:indx_end_vt])])    
                                 except BaseException:
                                     pass
