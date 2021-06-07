@@ -38,7 +38,7 @@ class NstatResolver:
             self.vt_api_key = config["API_KEY"]["virus_total"]  # Edit config file with your virus total API key.
         except:
             config["API_KEY"] = {
-                "virus_total": "''"
+                "virus_total": ""
                 }
             write_config_file()            
         self.vt_api_key = config["API_KEY"]["virus_total"]
@@ -63,7 +63,7 @@ class NstatResolver:
         except  KeyboardInterrupt:
             exit('\nExiting..')
         if self.choice == 1:
-            self.choose_1 = [('Program name', 'Remote address', 'Domain name', 'DNS history')]
+            self.choose_1 = [('Program name', 'Remote address', 'Domain name', 'DNS history (TC)', 'DNS history (VT)')]
             self.choose_2 = []
         elif self.choice == 2:
             self.choose_1 = []
@@ -167,7 +167,7 @@ class NstatResolver:
                                                    ip,
                                                    revers_lookup[ip],
                                                    "{"+tc[indx_tc:],
-                                                   vt[indx_start_vt:indx_end_vt])])    
+                                                   vt[indx_start_vt:indx_end_vt],)])
                                 except BaseException:
                                     pass
                                                                 
@@ -176,12 +176,12 @@ class NstatResolver:
                                     writer.writerows([(prog, 
                                                        ip, 
                                                        revers_lookup[ip], 
-                                                       tc[indx_tc:])])
+                                                       tc[indx_tc:], '{}',)])
                                 except KeyError:
                                     writer.writerows(
                                         [(prog, 
                                           ip, 
-                                          revers_lookup[ip])])
+                                          revers_lookup[ip], '{}', '{}',)])
                                     continue                            
 
                     elif choice == 2:
