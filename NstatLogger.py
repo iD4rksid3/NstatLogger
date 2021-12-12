@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Auther: 2020, Mayed Alm
 # NstatLogger: netstat logger of all TCP/IP and partially UDP communication from a host
-# version: 1.7
+# version: 1.8
 
 import os
 import sys
@@ -24,7 +24,7 @@ class NstatLogger:
   /  |/ / ___/ __/ __ `/ __/ /   / __ \/ __ `/ __ `/ _ \/ ___/
  / /|  (__  ) /_/ /_/ / /_/ /___/ /_/ / /_/ / /_/ /  __/ /
 /_/ |_/____/\__/\__,_/\__/_____/\____/\__, /\__, /\___/_/
-                                     /____//____/ v1.7    ©Mayed.alm
+                                     /____//____/ v1.8    ©Mayed.alm
 
             '''
 
@@ -85,10 +85,11 @@ class NstatLogger:
             (AF_INET, SOCK_DGRAM): 'udp',
             (AF_INET6, SOCK_DGRAM): 'udp6',
         }
-        self.templ = '%-5s %-5s %-5s %-5s %-5s %-5s %-5s %s'  # String formatting
+        self.templ = '%-5s %-5s %-5s %-5s %-5s %-5s %-5s %-5s %s'  # String formatting
         self.proc_names = {}
         self.proc_cmd = {}
         self.proc_time = {}
+        self.running_stat = {}
 
         def capture_action():
             print(
@@ -105,6 +106,7 @@ class NstatLogger:
                      'Status|',
                      'PID|',
                      'Program Name|',
+                     'Run Status|',
                      'Time Started|',
                      'Command Line|\n'))
             while self.current_time <= self.time_to_stop:
@@ -112,10 +114,16 @@ class NstatLogger:
                     # assign key as pid and value as process name
                     self.proc_names[p.info['pid']] = p.info['name']
                     self.proc_cmd[p.info['pid']] = p.info['cmdline']
+                    # running/stopped status
+                    try:
+                        self.running_stat[p.info['pid']] = str(
+                        p).split(',')[2][8:].replace(')', '').replace("'","")
+                    except IndexError:
+                        self.running_stat[p.info['pid']] = '?'                    
                     #trying to get the process start time, if not put '?'
                     try:
                         self.proc_time[p.info['pid']] = str(
-                        p).split(',')[2][9:].replace(')', '') 
+                        p).split(',')[3][9:].replace(')', '').replace(" ","_")
                     except IndexError:
                         self.proc_time[p.info['pid']] = '?'
                 for c in psutil.net_connections(kind='inet'):
@@ -147,6 +155,7 @@ class NstatLogger:
                                                    '|', str(c.pid) +
                                                       '|' or self.AD +
                                                       '|', self.proc_names.get(c.pid, '?') +
+                                                      '|', self.running_stat.get(c.pid, '?') +
                                                       '|', self.proc_time.get(c.pid, '?') +
                                                       '|', self.proc_cmd.get(c.pid, '?')) +
                                                    '\n'))
