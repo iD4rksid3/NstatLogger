@@ -1,6 +1,6 @@
 pandas==0.25.2
 aiodns==2.0.0
-aiohttp==3.7.4.post0
+aiohttp==3.8.5
 requests==2.31.0
 psutil==5.8.0
 matplotlib==3.2.2
